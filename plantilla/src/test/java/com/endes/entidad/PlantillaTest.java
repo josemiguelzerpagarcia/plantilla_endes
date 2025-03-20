@@ -11,11 +11,15 @@ import org.junit.jupiter.api.Test;
  */
 class PlantillaTest {
     private Plantilla plantilla;
+    Empleado empleado1;
+    Empleado empleado2;
 
     @BeforeEach
     @DisplayName("Inicialización de la plantilla de empleados")
     void setUp() {
         plantilla = new Plantilla();
+        empleado2 = new Tecnico("87654321B", "Ismael", "Dorantes", 1500.00, 6);
+        plantilla.contratarEmpleado(empleado2);
     }
 
     /**
@@ -36,5 +40,26 @@ class PlantillaTest {
 
         // Verificar el mensaje de la excepción
         assertEquals("El empleado con DNI 11111111H ya está contratado", ex.getMessage());
+    }
+    
+    @Test
+    @DisplayName("test para contratar un empleado")
+    void testContratarEmpleado () {
+    	Empleado empleado1 = null;
+    	IllegalArgumentException exceptionNull = assertThrows(IllegalArgumentException.class, () -> plantilla.contratarEmpleado(empleado1));
+    	String mensajeEsperado = "No se puede contratar un empleado nulo";
+    	assertEquals(mensajeEsperado, exceptionNull.getMessage());
+    	
+    	Empleado empleado3 = new Tecnico("87654321B", "Juanmi", "Ruiz", 1500.00, 6);
+    	IllegalArgumentException exceptionDNI = assertThrows(IllegalArgumentException.class, () -> plantilla.contratarEmpleado(empleado3));
+    	String mensajeEsperadoDNI = "No se puede contratar un empleado duplicado";
+    	assertEquals(mensajeEsperadoDNI, exceptionDNI.getMessage());
+    	
+    	Empleado empleado4 = new Tecnico("87654321B", "Ismael", "Dorantes", 1500.00, 6);
+    	IllegalArgumentException exceptionDuplicado = assertThrows(IllegalArgumentException.class, () -> plantilla.contratarEmpleado(empleado1));
+    	String mensajeDuplicadoEsperado = "No se puede contratar un empleado con DNI duplicado";
+    	assertEquals(mensajeDuplicadoEsperado, exceptionDuplicado.getMessage());
+    	
+    	
     }
 }
